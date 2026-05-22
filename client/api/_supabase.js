@@ -20,17 +20,26 @@ function readBody(req) {
 }
 
 function getSupabaseConfig() {
-  const url = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL)?.replace(/\/$/, "");
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_ANON_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY;
+  const url = firstConfiguredValue(process.env.SUPABASE_URL, process.env.VITE_SUPABASE_URL)?.replace(/\/$/, "");
+  const key = firstConfiguredValue(
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    process.env.SUPABASE_ANON_KEY,
+    process.env.VITE_SUPABASE_ANON_KEY
+  );
 
   if (!url || !key) {
     throw new Error("Missing Supabase URL or API key.");
   }
 
   return { url, key };
+}
+
+function firstConfiguredValue(...values) {
+  return values.map((value) => value?.trim()).find((value) => value && !isPlaceholderValue(value));
+}
+
+function isPlaceholderValue(value) {
+  return /your-project-ref|your[-_]?supabase|your[-_]?.*key/i.test(value);
 }
 
 async function supabaseRequest(path, init = {}) {
