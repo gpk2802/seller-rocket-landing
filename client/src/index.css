@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 23% 97%;
+    --foreground: 224 60% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 60% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 60% 8%;
+    --primary: 211 52% 25%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 48 92% 53%;
+    --secondary-foreground: 224 60% 8%;
+    --muted: 220 18% 94%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 48 92% 53%;
+    --accent-foreground: 224 60% 8%;
+    --destructive: 0 70% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 219 22% 87%;
+    --input: 219 22% 87%;
+    --ring: 48 92% 53%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Geist", "Inter", "Aptos", "Segoe UI", sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+    background:
+      radial-gradient(circle at 12% -10%, rgba(245, 197, 24, 0.12), transparent 28rem),
+      radial-gradient(circle at 88% 4%, rgba(30, 58, 95, 0.10), transparent 30rem),
+      linear-gradient(180deg, #fafaf7 0%, #ffffff 38%, #f7f8fb 100%);
+  }
+
+  ::selection {
+    background: rgba(245, 197, 24, 0.36);
+    color: #10142f;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Geist", "Inter", "Aptos Display", "Aptos", "Segoe UI", sans-serif;
+    letter-spacing: 0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .premium-grid {
+    background-image:
+      linear-gradient(rgba(30, 58, 95, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 58, 95, 0.07) 1px, transparent 1px),
+      radial-gradient(circle at 16% 0%, rgba(245, 197, 24, 0.12), transparent 28rem),
+      radial-gradient(circle at 80% 12%, rgba(30, 58, 95, 0.12), transparent 28rem);
+    background-size: 44px 44px, 44px 44px, auto, auto;
+  }
+
+  .marquee-track {
+    animation: marquee-slide 28s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-slide {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .marquee-track {
+      animation: none;
+      transform: none;
+    }
+  }
+}
