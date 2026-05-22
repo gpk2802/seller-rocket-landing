@@ -49,7 +49,7 @@ Backend: `http://localhost:5000`
 
 ## Vercel Notes
 
-When deploying the `client` app to Vercel, keep `VITE_API_BASE_URL` blank so the frontend uses same-origin `/api` serverless routes. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel project settings for those routes.
+When deploying the `client` app to Vercel, keep `VITE_API_BASE_URL` blank so the frontend uses same-origin `/api` serverless routes. Add `SUPABASE_URL` and either `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_ANON_KEY` in Vercel project settings for those routes.
 
 ## Completed For Task 1
 
