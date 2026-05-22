@@ -1,4 +1,5 @@
-import { Router } from "express";
+import { type Request, type Response, Router } from "express";
+import { config } from "../config.js";
 import { supabase } from "../supabase.js";
 import { createLeadSchema, isPlatform, statusUpdateSchema } from "../validators.js";
 
@@ -9,6 +10,20 @@ function validationDetails(error: unknown) {
     return error.flatten();
   }
   return error;
+}
+
+function requireAdmin(req: Request, res: Response) {
+  if (!config.adminApiKey) {
+    res.status(500).json({ success: false, error: "Missing ADMIN_API_KEY." });
+    return false;
+  }
+
+  if (req.header("x-admin-key") !== config.adminApiKey) {
+    res.status(401).json({ success: false, error: "Admin access key required." });
+    return false;
+  }
+
+  return true;
 }
 
 leadsRouter.post("/", async (req, res) => {
@@ -40,6 +55,8 @@ leadsRouter.post("/", async (req, res) => {
 });
 
 leadsRouter.get("/", async (req, res) => {
+  if (!requireAdmin(req, res)) return;
+
   const platform = req.query.platform;
 
   if (platform !== undefined && !isPlatform(platform)) {
@@ -67,6 +84,8 @@ leadsRouter.get("/", async (req, res) => {
 });
 
 leadsRouter.patch("/:id/status", async (req, res) => {
+  if (!requireAdmin(req, res)) return;
+
   const parsed = statusUpdateSchema.safeParse(req.body);
 
   if (!parsed.success) {
@@ -97,6 +116,8 @@ leadsRouter.patch("/:id/status", async (req, res) => {
 });
 
 leadsRouter.delete("/:id", async (req, res) => {
+  if (!requireAdmin(req, res)) return;
+
   const { data, error } = await supabase
     .from("leads")
     .delete()
@@ -115,4 +136,3 @@ leadsRouter.delete("/:id", async (req, res) => {
 
   return res.json({ success: true, data });
 });
-

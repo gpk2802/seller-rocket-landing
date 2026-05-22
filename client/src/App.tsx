@@ -9,6 +9,19 @@ import { ServicesSection } from "./components/landing/ServicesSection";
 import { AppToaster } from "./components/ui/toaster";
 
 export default function App() {
+  const isAdminRoute = typeof window !== "undefined" && window.location.pathname === "/admin";
+
+  if (isAdminRoute) {
+    return (
+      <>
+        <main>
+          <AdminDashboard />
+        </main>
+        <AppToaster />
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -18,7 +31,6 @@ export default function App() {
         <ServicesSection />
         <GrowthSections />
         <ContactSection />
-        <AdminDashboard />
       </main>
       <Footer />
       <AppToaster />

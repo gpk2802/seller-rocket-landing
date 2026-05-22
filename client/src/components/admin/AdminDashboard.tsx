@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BarChart3, Filter, Loader2, MoreHorizontal, RefreshCw, Search, Trash2 } from "../ui/icons";
+import { BarChart3, Filter, KeyRound, Loader2, LogOut, MoreHorizontal, RefreshCw, Search, ShieldCheck, Trash2 } from "../ui/icons";
 import { toast } from "sonner";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { cn } from "../../lib/utils";
-import { api } from "../../lib/api";
+import { ApiError, api } from "../../lib/api";
 import { leadStatuses, platforms, type Lead, type LeadStatus, type Platform } from "../../types";
 
 type PlatformFilter = Platform | "All";
@@ -30,6 +30,7 @@ const statusTone: Record<LeadStatus, string> = {
 
 const platformFilters: PlatformFilter[] = ["All", ...platforms];
 const navItems = ["Overview", "Leads", "Services", "Case Studies", "Testimonials", "Settings"];
+const ADMIN_STORAGE_KEY = "sellerrocket_admin_key";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-IN", {
@@ -47,11 +48,20 @@ export function AdminDashboard() {
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [hasAdminAccess, setHasAdminAccess] = useState(() => {
+    return typeof window !== "undefined" && Boolean(window.sessionStorage.getItem(ADMIN_STORAGE_KEY));
+  });
+  const [adminKeyInput, setAdminKeyInput] = useState("");
+  const [loading, setLoading] = useState(hasAdminAccess);
   const [error, setError] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const fetchLeads = useCallback(async () => {
+    if (!hasAdminAccess) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -59,11 +69,15 @@ export function AdminDashboard() {
       setLeads(data);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unable to load leads.";
+      if (err instanceof ApiError && err.status === 401) {
+        window.sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+        setHasAdminAccess(false);
+      }
       setError(message);
     } finally {
       setLoading(false);
     }
-  }, [platformFilter]);
+  }, [hasAdminAccess, platformFilter]);
 
   useEffect(() => {
     void fetchLeads();
@@ -140,6 +154,72 @@ export function AdminDashboard() {
     }
   };
 
+  const submitAdminKey = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const value = adminKeyInput.trim();
+
+    if (!value) {
+      toast.error("Enter the admin access key.");
+      return;
+    }
+
+    window.sessionStorage.setItem(ADMIN_STORAGE_KEY, value);
+    setHasAdminAccess(true);
+    setError(null);
+  };
+
+  const signOut = () => {
+    window.sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+    setHasAdminAccess(false);
+    setAdminKeyInput("");
+    setLeads([]);
+  };
+
+  if (!hasAdminAccess) {
+    return (
+      <section id="admin" className="min-h-screen bg-brand-cream px-3 py-16">
+        <div className="container flex min-h-[72vh] items-center justify-center">
+          <form
+            onSubmit={submitAdminKey}
+            className="w-full max-w-md rounded-[1.75rem] border border-brand-line bg-white p-6 shadow-brand-lift"
+          >
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-deep text-brand-gold">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <Badge variant="outline" className="mb-4 bg-white text-brand-navy">Admin access</Badge>
+            <h1 className="text-3xl font-bold tracking-tight text-brand-deep">Seller Rocket CRM</h1>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Enter the admin key from your Vercel environment variables to view and manage incoming leads.
+            </p>
+            {error ? (
+              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-800">
+                {error}
+              </div>
+            ) : null}
+            <div className="mt-6 space-y-2">
+              <label htmlFor="admin-key" className="text-sm font-bold text-brand-deep">Admin key</label>
+              <div className="relative">
+                <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="admin-key"
+                  type="password"
+                  value={adminKeyInput}
+                  onChange={(event) => setAdminKeyInput(event.target.value)}
+                  placeholder="Enter ADMIN_API_KEY"
+                  className="pl-10"
+                  autoComplete="current-password"
+                />
+              </div>
+            </div>
+            <Button type="submit" variant="gold" size="lg" className="mt-5 w-full rounded-full">
+              Open Admin Dashboard
+            </Button>
+          </form>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="admin" className="bg-brand-cream py-20 lg:py-28">
       <div className="container">
@@ -155,7 +235,7 @@ export function AdminDashboard() {
           </div>
 
           <div className="rounded-2xl border border-brand-line bg-white p-4 shadow-sm">
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
@@ -168,6 +248,10 @@ export function AdminDashboard() {
               <Button variant="subtle" onClick={() => void fetchLeads()} disabled={loading}>
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
                 Refresh
+              </Button>
+              <Button variant="outline" onClick={signOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign out
               </Button>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">

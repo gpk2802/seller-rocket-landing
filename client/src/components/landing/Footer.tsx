@@ -1,5 +1,6 @@
-import { ArrowRight, Mail, MapPin, PhoneCall, Rocket } from "../ui/icons";
+import { ArrowRight, Mail, MapPin, PhoneCall } from "../ui/icons";
 import { Button } from "../ui/button";
+import { BrandLogo } from "../ui/brand-logo";
 
 const serviceLinks = ["Amazon Management", "Shopify Store Setup", "WordPress Development", "Marketplace Growth", "AI Ecommerce Systems"];
 const platformLinks = ["Amazon", "Shopify", "WordPress", "WooCommerce", "Flipkart", "Meesho"];
@@ -10,12 +11,7 @@ export function Footer() {
       <div className="container">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.7fr_0.7fr_0.8fr]">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold text-brand-deep">
-                <Rocket className="h-5 w-5" />
-              </span>
-              <span className="text-lg font-bold">Seller Rocket</span>
-            </div>
+            <BrandLogo markClassName="h-11 w-11 border border-white/10 bg-white" textClassName="[&_*]:text-white" showTagline />
             <p className="mt-4 max-w-md text-sm leading-6 text-white/64">
               Ecommerce growth agency helping Indian brands scale through marketplace execution, premium storefronts, performance marketing, and AI-powered operations.
             </p>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Menu, PhoneCall, Rocket, X } from "../ui/icons";
+import { Menu, PhoneCall, X } from "../ui/icons";
 import { Button } from "../ui/button";
+import { BrandLogo } from "../ui/brand-logo";
 import { cn } from "../../lib/utils";
 
 const navItems = [
@@ -54,13 +55,8 @@ export function Navbar() {
             : "border-transparent bg-white/55 text-brand-deep backdrop-blur-md"
         )}
       >
-        <a href="#home" className="flex items-center gap-2 font-bold" onClick={() => setOpen(false)}>
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-deep text-brand-gold shadow-navy-glow">
-            <Rocket className="h-5 w-5" />
-          </span>
-          <span className="text-base tracking-tight md:text-lg">
-            Seller <span className="text-brand-mutedGold">Rocket</span>
-          </span>
+        <a href="#home" className="flex min-w-0 items-center font-bold" onClick={() => setOpen(false)} aria-label="Seller Rocket home">
+          <BrandLogo markClassName="h-10 w-10 shadow-sm" textClassName="hidden sm:block" />
         </a>
 
         <div className="hidden items-center gap-1 md:flex">
