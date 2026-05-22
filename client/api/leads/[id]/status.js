@@ -1,4 +1,4 @@
-import { isLeadStatus, json, readBody, requireAdmin, supabaseRequest } from "../../_supabase.js";
+import { isLeadStatus, json, readBody, supabaseRequest } from "../../_supabase.js";
 
 export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
@@ -8,8 +8,6 @@ export default async function handler(req, res) {
   if (req.method !== "PATCH") {
     return json(res, 405, { success: false, error: "Method not allowed" });
   }
-
-  if (!requireAdmin(req, res)) return;
 
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
   const body = readBody(req);

@@ -1,4 +1,4 @@
-import { json, requireAdmin, supabaseRequest } from "../_supabase.js";
+import { json, supabaseRequest } from "../_supabase.js";
 
 export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
@@ -8,8 +8,6 @@ export default async function handler(req, res) {
   if (req.method !== "DELETE") {
     return json(res, 405, { success: false, error: "Method not allowed" });
   }
-
-  if (!requireAdmin(req, res)) return;
 
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
 

@@ -7,7 +7,7 @@ const metrics = [
   ["40%", "average conversion lift"]
 ];
 
-const platforms = ["Amazon", "Shopify", "WordPress", "WooCommerce", "Flipkart", "Meesho", "Meta Ads", "Google Ads"];
+const platforms = ["Amazon", "Flipkart", "Shopify", "WordPress"];
 
 export function MarketplaceStrip() {
   return (

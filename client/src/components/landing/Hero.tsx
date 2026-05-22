@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  ArrowUpRight,
   BarChart3,
   CheckCircle2,
   CircleDollarSign,
@@ -58,12 +57,6 @@ export function Hero() {
               <a href="#lead-form">
                 Book a Free Growth Audit
                 <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button variant="subtle" size="lg" className="w-full rounded-full sm:w-auto" asChild>
-              <a href="#results">
-                View Growth Results
-                <ArrowUpRight className="ml-2 h-4 w-4" />
               </a>
             </Button>
           </div>

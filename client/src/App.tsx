@@ -2,7 +2,6 @@ import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { Hero } from "./components/landing/Hero";
 import { ContactSection } from "./components/landing/ContactSection";
 import { Footer } from "./components/landing/Footer";
-import { GrowthSections } from "./components/landing/GrowthSections";
 import { MarketplaceStrip } from "./components/landing/MarketplaceStrip";
 import { Navbar } from "./components/landing/Navbar";
 import { ServicesSection } from "./components/landing/ServicesSection";
@@ -29,7 +28,6 @@ export default function App() {
         <Hero />
         <MarketplaceStrip />
         <ServicesSection />
-        <GrowthSections />
         <ContactSection />
       </main>
       <Footer />

@@ -1,12 +1,19 @@
 import type { Lead, LeadPayload, LeadStatus, Platform } from "../types";
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
+function getApiBaseUrl() {
+  const configured = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
 
-function adminHeaders(): Record<string, string> {
-  if (typeof window === "undefined") return {};
-  const adminKey = window.sessionStorage.getItem("sellerrocket_admin_key");
-  return adminKey ? { "x-admin-key": adminKey } : {};
+  if (!configured || typeof window === "undefined") {
+    return configured;
+  }
+
+  const isProductionHost = !["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const isLocalApi = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(configured);
+
+  return isProductionHost && isLocalApi ? "" : configured;
 }
+
+const API_BASE_URL = getApiBaseUrl();
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -54,21 +61,17 @@ export const api = {
   },
   listLeads(platform?: Platform | "All") {
     const query = platform && platform !== "All" ? `?platform=${encodeURIComponent(platform)}` : "";
-    return request<Lead[]>(`/api/leads${query}`, {
-      headers: adminHeaders()
-    });
+    return request<Lead[]>(`/api/leads${query}`);
   },
   updateLeadStatus(id: string, status: LeadStatus) {
     return request<Lead>(`/api/leads/${id}/status`, {
       method: "PATCH",
-      headers: adminHeaders(),
       body: JSON.stringify({ status })
     });
   },
   deleteLead(id: string) {
     return request<{ id: string }>(`/api/leads/${id}`, {
-      method: "DELETE",
-      headers: adminHeaders()
+      method: "DELETE"
     });
   }
 };

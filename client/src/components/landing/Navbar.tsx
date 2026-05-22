@@ -6,10 +6,8 @@ import { BrandLogo } from "../ui/brand-logo";
 import { cn } from "../../lib/utils";
 
 const navItems = [
+  { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
-  { label: "Results", href: "#results" },
-  { label: "Process", href: "#process" },
-  { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#lead-form" }
 ];
 
@@ -26,7 +24,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = [{ href: "#home" }, ...navItems]
+    const sections = navItems
       .map((item) => document.querySelector(item.href))
       .filter((section): section is Element => Boolean(section));
 

@@ -10,24 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Textarea } from "../ui/textarea";
 import { cn } from "../../lib/utils";
 import { api } from "../../lib/api";
-import {
-  platforms,
-  revenueRanges,
-  serviceInterests,
-  type LeadPayload,
-  type Platform,
-  type RevenueRange,
-  type ServiceInterest
-} from "../../types";
+import { platforms, type LeadPayload, type Platform } from "../../types";
 
 type FormValues = {
   name: string;
   phone: string;
   email: string;
-  website: string;
   platform: Platform | "";
-  revenue_range: RevenueRange | "";
-  service_interest: ServiceInterest | "";
   message: string;
 };
 
@@ -42,10 +31,7 @@ const initialValues: FormValues = {
   name: "",
   phone: "",
   email: "",
-  website: "",
   platform: "",
-  revenue_range: "",
-  service_interest: "",
   message: ""
 };
 
@@ -55,10 +41,7 @@ function validate(values: FormValues) {
   if (!values.name.trim()) errors.name = "Name is required.";
   if (!/^\d{10}$/.test(values.phone.trim())) errors.phone = "Phone must be exactly 10 digits.";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) errors.email = "Enter a valid work email.";
-  if (!values.website.trim()) errors.website = "Add your website or marketplace link.";
   if (!values.platform) errors.platform = "Select a primary platform.";
-  if (!values.revenue_range) errors.revenue_range = "Select monthly revenue range.";
-  if (!values.service_interest) errors.service_interest = "Select your main growth need.";
   if (values.message.length > 600) errors.message = "Message must be under 600 characters.";
 
   return errors;
@@ -111,10 +94,7 @@ export function LeadForm({ compact = false, className }: LeadFormProps) {
         name: values.name.trim(),
         phone: values.phone.trim(),
         email: values.email.trim(),
-        website: values.website.trim(),
         platform: values.platform as Platform,
-        revenue_range: values.revenue_range as RevenueRange,
-        service_interest: values.service_interest as ServiceInterest,
         message: values.message.trim()
       };
 
@@ -208,22 +188,6 @@ export function LeadForm({ compact = false, className }: LeadFormProps) {
                 <FieldError id="phone-error" message={errors.phone} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="website">Brand website / marketplace link</Label>
-                <Input
-                  id="website"
-                  value={values.website}
-                  onChange={(event) => updateValue("website", event.target.value)}
-                  placeholder="https://yourbrand.com"
-                  autoComplete="url"
-                  aria-invalid={Boolean(errors.website)}
-                  aria-describedby={errors.website ? "website-error" : undefined}
-                />
-                <FieldError id="website-error" message={errors.website} />
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="space-y-2">
                 <Label htmlFor="platform">Primary platform</Label>
                 <Select value={values.platform} onValueChange={(value) => updateValue("platform", value as Platform)}>
                   <SelectTrigger id="platform" aria-invalid={Boolean(errors.platform)} aria-describedby={errors.platform ? "platform-error" : undefined}>
@@ -236,36 +200,6 @@ export function LeadForm({ compact = false, className }: LeadFormProps) {
                   </SelectContent>
                 </Select>
                 <FieldError id="platform-error" message={errors.platform} />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="revenue_range">Monthly revenue</Label>
-                <Select value={values.revenue_range} onValueChange={(value) => updateValue("revenue_range", value as RevenueRange)}>
-                  <SelectTrigger id="revenue_range" aria-invalid={Boolean(errors.revenue_range)} aria-describedby={errors.revenue_range ? "revenue-error" : undefined}>
-                    <SelectValue placeholder="Select range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {revenueRanges.map((range) => (
-                      <SelectItem key={range} value={range}>{range}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FieldError id="revenue-error" message={errors.revenue_range} />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="service_interest">Primary growth need</Label>
-                <Select value={values.service_interest} onValueChange={(value) => updateValue("service_interest", value as ServiceInterest)}>
-                  <SelectTrigger id="service_interest" aria-invalid={Boolean(errors.service_interest)} aria-describedby={errors.service_interest ? "service-error" : undefined}>
-                    <SelectValue placeholder="Select need" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {serviceInterests.map((interest) => (
-                      <SelectItem key={interest} value={interest}>{interest}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FieldError id="service-error" message={errors.service_interest} />
               </div>
             </div>
 

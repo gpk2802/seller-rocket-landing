@@ -1,4 +1,4 @@
-import { isPlatform, json, requireAdmin, supabaseRequest, validateLeadPayload } from "./_supabase.js";
+import { isPlatform, json, supabaseRequest, validateLeadPayload } from "./_supabase.js";
 
 export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
@@ -31,8 +31,6 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "GET") {
-    if (!requireAdmin(req, res)) return;
-
     const platform = Array.isArray(req.query.platform) ? req.query.platform[0] : req.query.platform;
 
     if (platform !== undefined && !isPlatform(platform)) {

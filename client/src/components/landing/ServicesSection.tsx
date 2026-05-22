@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Code2, DatabaseZap, Globe2, Megaphone, PackageCheck, Store } from "../ui/icons";
+import { ArrowRight, Code2, PackageCheck, Store } from "../ui/icons";
 import { Badge } from "../ui/badge";
 import { cn } from "../../lib/utils";
 
@@ -20,31 +20,10 @@ const services = [
   },
   {
     title: "WordPress Development",
-    description: "Trust-building brand sites and WooCommerce systems with clear lead capture and content structure.",
+    description: "Trust-building brand sites with clear lead capture, fast pages, and simple content control.",
     icon: Code2,
     tag: "Development",
     points: ["Fast pages", "Lead forms", "CMS control"]
-  },
-  {
-    title: "Marketplace Growth",
-    description: "Expansion systems for Flipkart, Meesho, and category marketplaces with reporting discipline.",
-    icon: Globe2,
-    tag: "Scale",
-    points: ["Platform launch", "Catalog mapping", "Visibility lift"]
-  },
-  {
-    title: "AI Ecommerce Systems",
-    description: "Operational AI workflows for reporting, catalog intelligence, ad analysis, and decision speed.",
-    icon: DatabaseZap,
-    tag: "Automation",
-    points: ["Auto reports", "SKU insights", "Faster decisions"]
-  },
-  {
-    title: "Performance Marketing",
-    description: "Meta, Google, and marketplace campaigns managed around ROAS, funnel health, and contribution margin.",
-    icon: Megaphone,
-    tag: "Acquisition",
-    points: ["ROAS control", "Creative testing", "Funnel tracking"]
   }
 ];
 

@@ -47,6 +47,10 @@ Backend: `http://localhost:5000`
 - `PATCH /api/leads/:id/status`
 - `DELETE /api/leads/:id`
 
+## Vercel Notes
+
+When deploying the `client` app to Vercel, keep `VITE_API_BASE_URL` blank so the frontend uses same-origin `/api` serverless routes. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel project settings for those routes.
+
 ## Completed For Task 1
 
 - Seller Rocket branded responsive landing page
@@ -56,4 +60,3 @@ Backend: `http://localhost:5000`
 - Backend validation for phone, email, platform, and status
 - Supabase-backed lead storage
 - Admin leads view with platform filter, status update, delete, loading, empty, and error states
-
