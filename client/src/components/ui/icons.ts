@@ -14,6 +14,7 @@ export {
   Filter,
   Gauge,
   Globe2,
+  Home,
   KeyRound,
   Layers3,
   LineChart,

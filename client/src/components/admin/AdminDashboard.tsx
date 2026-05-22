@@ -1,6 +1,6 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BarChart3, Filter, KeyRound, Loader2, LogOut, MoreHorizontal, RefreshCw, Search, ShieldCheck, Trash2 } from "../ui/icons";
+import { BarChart3, Filter, Home, KeyRound, Loader2, LogOut, MoreHorizontal, RefreshCw, Search, ShieldCheck, Trash2 } from "../ui/icons";
 import { toast } from "sonner";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -214,6 +214,12 @@ export function AdminDashboard() {
             <Button type="submit" variant="gold" size="lg" className="mt-5 w-full rounded-full">
               Open Admin Dashboard
             </Button>
+            <Button variant="subtle" size="lg" className="mt-3 w-full rounded-full" asChild>
+              <a href="/">
+                <Home className="mr-2 h-4 w-4" />
+                Back to Home
+              </a>
+            </Button>
           </form>
         </div>
       </section>
@@ -235,7 +241,7 @@ export function AdminDashboard() {
           </div>
 
           <div className="rounded-2xl border border-brand-line bg-white p-4 shadow-sm">
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]">
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
@@ -245,6 +251,12 @@ export function AdminDashboard() {
                   className="pl-10"
                 />
               </div>
+              <Button variant="subtle" asChild>
+                <a href="/">
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
+                </a>
+              </Button>
               <Button variant="subtle" onClick={() => void fetchLeads()} disabled={loading}>
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
                 Refresh
